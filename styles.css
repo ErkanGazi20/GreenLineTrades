@@ -5,10 +5,19 @@
     box-sizing: border-box;
   }
   
-  /* Body Styling */
-  body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
+/* Body Styling */
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f8f8; /* soft light gray */
+}
+
+  /* Main Content Section Styling */
+main {
+    flex: 1; /* Allow the main content to take up available space */
   }
   
   /* Header Styling */
@@ -16,6 +25,7 @@
     background-color: black;
     padding: 1rem 0;
     width: 100%;
+    animation: slideDown 0.8s ease-out forwards;
   }
   
   /* Logo Styling */
@@ -35,11 +45,11 @@
     flex-wrap: nowrap;
   }
   
-  .logo {
-    color: white;
-    font-size: clamp(1rem, 2vw, 1.5rem);
-    font-weight: bold;
-    white-space: nowrap;
+  .logo-image {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    object-fit: cover;
   }
   
   .nav-list {
@@ -70,15 +80,14 @@
     border-radius: 4px;
   }
   
-  /* Footer Styling */
-  footer {
+ /* Footer Styling */
+footer {
     background-color: black; /* Black background for footer */
     color: white;
     text-align: center;
     padding: 20px 0;
-    position: absolute;
-    bottom: 0;
     width: 100%;
+    animation: slideUp 0.8s ease-out forwards;
   }
   
   /* Media Query for Smaller Screens */
@@ -99,4 +108,184 @@
       margin: 10px 0;
     }
   }
+
+  .section-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    padding: 4rem 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .section-row-reverse {
+    flex-direction: row-reverse;
+  }
+  
+  .section-row .text {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .section-row .image {
+    flex: 1;
+    min-width: 300px;
+  }
+  
+  .section-row .image img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  }  
+
+  .products-page {
+    flex: 1;
+    padding: 4rem 2rem;
+  }
+  
+  .products-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem; /* gap between boxes */
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .category-box {
+    flex: 1 1 calc(25% - 2rem); /* 4 per row */
+    min-width: 200px;
+    background-color: #f5f5f5;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .category-box:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  .view-all-button {
+    background-color: black;
+    color: white;
+    padding: 0.6rem 1.25rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    white-space: nowrap;
+  }
+  
+  .view-all-button:hover {
+    background-color: #333;
+    transform: translateY(-2px);
+  }
+
+  .products-page {
+    background-color: #f8f8f8;
+    padding: 4rem 2rem;
+    min-height: 80vh;
+  }
+
+  .section-white {
+    background-color: white;
+    padding: 4rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin: 2rem auto;
+    width: 90%;
+    max-width: 1200px;
+  }
+
+  .contact-form .form-input,
+.contact-form .form-textarea {
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+.contact-form .form-button {
+  padding: 0.75rem;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.contact-form .form-button:hover {
+  background-color: #444;
+}
+
+.input-error {
+  border: 2px solid #e74c3c !important;
+  background-color: #fff0f0;
+}
+
+.error-message {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+/* Apply the same vertical form layout as the contact form */
+form.contact-form {
+  display: flex;
+  flex-direction: column; /* Align inputs vertically */
+  gap: 1rem;  /* Spacing between form elements */
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.spinner {
+  font-size: 1rem;
+  animation: spin 1s linear infinite;
+  display: inline-block;
+}
+
+  /* Animation keyframes */
+@keyframes slideDown {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideUp {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  /* Responsive tweak: 2 per row on small screens */
+@media (max-width: 768px) {
+  .category-box {
+    flex: 1 1 calc(50% - 2rem);
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
   

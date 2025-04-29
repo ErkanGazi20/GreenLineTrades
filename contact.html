@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+      (function(){
+        emailjs.init("YJ6TetlfB6x7bthIQ");
+      })();
+    </script>       
+    <script src="app.js" defer></script>
+    <title>Contact us</title>
+</head>
+<body>
+    <!-- Header Section -->
+  <header>
+    <nav class="nav-container">
+      <div class="logo">
+        <img src="GreenLineTradesLogo.png" alt="Green Line Trades Logo" class="logo-image">
+      </div>
+      <ul class="nav-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li id="login-link"><a href="login.html">Login</a></li>
+        <li id="register-link"><a href="register.html">Register</a></li>
+        <li id="welcome-message" style="display:none; font-weight: bold;"></li>
+        <li id="logout-link" style="display:none;"><a href="#">Logout</a></li>
+      </ul>
+      
+    </nav>
+  </header>
+
+  <!-- Main Section -->
+  <main class="section-white">
+    <h2 style="text-align: center; margin-bottom: 2rem;">Get in Touch</h2>
+    <form class="contact-form" id="contact-form" method="post" style="max-width: 600px; margin: 0 auto; display: flex; flex-direction: column; gap: 1rem;">
+      <input type="text" name="name" id="contact-name" placeholder="Your Name" class="form-input" required />
+      <input type="email" name="email" id="contact-email" placeholder="Your Email" class="form-input" required />      
+      <input type="text" name="subject" placeholder="Subject" class="form-input" required />
+      <textarea name="message" rows="5" placeholder="Your Message" class="form-textarea" required></textarea>
+      <button type="submit" class="form-button">Send Message</button>
+    </form>
+    <div id="message-popup" style="
+  display: none;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background-color: #d4edda;
+  color: #155724;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  z-index: 1000;
+  font-weight: bold;
+">
+  ✅ Message sent successfully!
+</div>
+
+  </main>
+
+    <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2025 Green Line Trades. All rights reserved.</p>
+  </footer>
+    
+</body>
+</html>

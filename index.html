@@ -1,41 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Green Line Trades</title>
-  <link rel="stylesheet" href="styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green Line Trades</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
 </head>
 <body>
-
+    
   <!-- Header Section -->
   <header>
     <nav class="nav-container">
-      <div class="logo">GreenLineTrades</div>
+      <div class="logo">
+        <img src="GreenLineTradesLogo.png" alt="Green Line Trades Logo" class="logo-image">
+      </div>
       <ul class="nav-list">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Products</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li id="login-link"><a href="login.html">Login</a></li>
+        <li id="register-link"><a href="register.html">Register</a></li>
+        <li id="welcome-message" style="display:none; font-weight: bold;"></li>
+        <li id="logout-link" style="display:none;"><a href="#">Logout</a></li>
       </ul>
     </nav>
   </header>
-  
-  </header>
-  
 
   <!-- Main Content Section -->
   <main>
-    <section id="about">
-      <h2>About Us</h2>
-      <p>Content about the Green Line Trade.</p>
+
+    <!-- Hero Section -->
+    <section class="section-row">
+      <div class="text">
+        <h1>Welcome to Green Line Trades</h1>
+        <p>Empowering cross-community trade across Cyprus with transparency and trust.</p>
+        <a href="about.html" style="display:inline-block; margin-top:1rem; background-color:black; color:white; padding:0.5rem 1rem; border-radius:4px; text-decoration:none;">Learn More</a>
+      </div>
+      <div class="image">
+        <img src="images/hero.jpg" alt="Green Line Hero Image" />
+      </div>
     </section>
-    <!-- More sections here -->
+
+    <!-- Mission Section -->
+    <section class="section-row-reverse section-row">
+      <div class="text">
+        <h2>Our Mission</h2>
+        <p>To bridge communities and facilitate ethical, profitable trade along the Green Line with clarity and cooperation.</p>
+      </div>
+      <div class="image">
+        <img src="images/mission.jpg" alt="Mission Image" />
+      </div>
+    </section>
+
+    <!-- Featured Products Section -->
+    <section class="section-white" style="text-align: center;">
+      <h2 style="margin-bottom: 0.5rem;">Featured Products</h2>
+      <a href="products.html" class="view-all-button">View all products →</a>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin-top: 2rem;">
+        <div style="flex: 1; min-width: 250px; max-width: 300px;">
+          <img src="images/aliminum.jpg" alt="Aluminum" style="width:100%; border-radius: 8px;" />
+          <h3>Industrial Materials</h3>
+        </div>
+        <div style="flex: 1; min-width: 250px; max-width: 300px;">
+          <img src="images/hellim.jpg" alt="Hellim" style="width:100%; border-radius: 8px;" />
+          <h3>Agricultural and Food Products</h3>
+        </div>
+        <div style="flex: 1; min-width: 250px; max-width: 300px;">
+          <img src="images/drycleaners.jpg" alt="Dry Cleaners" style="width:100%; border-radius: 8px;" />
+          <h3>Services</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section style="padding: 4rem 2rem; background-color: #f9f9f9;">
+      <h2 style="text-align: center;">How It Works</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin-top: 2rem;">
+        <div style="flex: 1; min-width: 200px; max-width: 250px; text-align: center;">
+          <h3>1. Connect</h3>
+          <p>Reach out through our network and discover verified trade partners.</p>
+        </div>
+        <div style="flex: 1; min-width: 200px; max-width: 250px; text-align: center;">
+          <h3>2. Trade</h3>
+          <p>Follow transparent guidelines and complete your transactions with ease.</p>
+        </div>
+        <div style="flex: 1; min-width: 200px; max-width: 250px; text-align: center;">
+          <h3>3. Grow</h3>
+          <p>Scale your business with ongoing support and opportunities.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="section-white">
+      <h2 style="text-align: center;">What Our Traders Say</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 2rem; justify-content: center; margin-top: 2rem;">
+        <blockquote style="max-width: 300px; font-style: italic;">"GLT helped me expand my olive oil business across the border seamlessly!" <br/><strong>- Celal Arap</strong></blockquote>
+        <blockquote style="max-width: 300px; font-style: italic;">"Trustworthy partners, quick communication — highly recommended." <br/><strong>- Panaidies</strong></blockquote>
+      </div>
+    </section>
+
+    <!-- Contact / Call to Action Section -->
+    <section style="padding: 4rem 2rem; background-color: #e5f5e0; text-align: center;">
+      <h2>Ready to Trade?</h2>
+      <p>Get in touch today and start building your cross-border trade success story.</p>
+      <a href="contact.html" style="display:inline-block; margin-top:1rem; background-color:black; color:white; padding:0.75rem 1.5rem; border-radius:4px; text-decoration:none;">Contact Us</a>
+    </section>
+
   </main>
 
   <!-- Footer Section -->
   <footer>
-    <p>&copy; 2025 Green Line Trades. All rights reserved.</p>
+      <p>&copy; 2025 Green Line Trades. All rights reserved.</p>
   </footer>
 
 </body>

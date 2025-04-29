@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register | Green Line Trades</title>
+  <link rel="stylesheet" href="styles.css"/>
+  <script defer src="register.js"></script>
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header>
+    <nav class="nav-container">
+      <div class="logo">
+        <img src="GreenLineTradesLogo.png" alt="Green Line Trades Logo" class="logo-image">
+      </div>
+      <ul class="nav-list">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="login.html">Login</a></li>
+        <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Main Content Section -->
+  <main class="section-white">
+    <h2 style="text-align:center; margin-bottom: 2rem;">Register</h2>
+    <form id="registerForm" class="contact-form">
+      <input type="text" id="firstName" name="firstName" placeholder="First Name" class="form-input" required />
+      <input type="text" id="lastName" name="lastName" placeholder="Last Name" class="form-input" required />
+      <input type="email" id="email" name="email" placeholder="Email" class="form-input" autocomplete="email" required />
+      <input type="tel" id="workTel" name="workTel" placeholder="Work Telephone" class="form-input" required />
+      <input type="tel" id="mobileTel" name="mobileTel" placeholder="Mobile Telephone" class="form-input" required />
+      
+      <input type="text" id="business" name="business" placeholder="Name of Business (Optional)" class="form-input" />
+
+      <input type="password" name="password" id="password" placeholder="Password" autocomplete="new-password" class="form-input" required />
+      <div id="passwordStrength" class="error-message"></div>
+
+      <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" class="form-input" required />
+      <div id="passwordMatch" class="error-message"></div>
+
+      <!-- Hidden user type field -->
+      <input type="hidden" name="type" value="user" />
+
+      <button type="submit" class="form-button">Register</button>
+    </form>
+  </main>
+
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2025 Green Line Trades. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>

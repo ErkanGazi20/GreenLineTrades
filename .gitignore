@@ -1,0 +1,11 @@
+# Ignore environment variables
+.env
+
+# Node modules (ALWAYS ignore this)
+node_modules/
+
+# Logs
+*.log
+
+# Optional: Mac system files
+.DS_Store
