@@ -4,35 +4,11 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const app = express();
+const Listing = require('./models/Listing');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-app.post('/submit', (req, res) => {
-  const authHeader = req.headers['authorization'];
-  let user = null;
-
-  // Optional auth handling
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    const token = authHeader.split(' ')[1];
-    try {
-      user = jwt.verify(token, "your_jwt_secret");
-      console.log("✅ Authenticated submission from:", user.email);
-    } catch (err) {
-      console.warn("⚠️ Invalid token provided:", err.message);
-      // Optional: return an error or just continue as anonymous
-    }
-  } else {
-    console.log("📩 Anonymous submission");
-  }
-
-  console.log("📩 Received submission:", req.body);
-
-  // TODO: Optionally save user-submitted message to DB
-
-  res.status(200).json({ success: true, message: "Message received" });
-});
 
 // MongoDB Connection
 mongoose.connect('mongodb://127.0.0.1:27017/greenlinetrades')
@@ -49,21 +25,54 @@ const userSchema = new mongoose.Schema({
   mobileTel: String,
   business: String,
   password: String,
-  type: { type: String, default: 'user' }
+  role: { 
+    type: String, 
+    enum: ['consumer', 'merchant', 'admin'], 
+    default: 'consumer' 
+  }
 });
 
 const User = mongoose.model('User', userSchema);
+
+// Middleware: Authenticate Token
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers['authorization'];
+  if (!authHeader || !authHeader.startsWith('Bearer ')) return res.sendStatus(401);
+
+  const token = authHeader.split(' ')[1];
+  jwt.verify(token, "your_jwt_secret", (err, user) => {
+    if (err) return res.sendStatus(403);
+    req.user = user;
+    next();
+  });
+};
+
+// Middleware: Authorize Roles
+const authorizeRoles = (...allowedRoles) => {
+  return async (req, res, next) => {
+    const dbUser = await User.findById(req.user.userId);
+    if (!dbUser || !allowedRoles.includes(dbUser.role)) {
+      return res.status(403).json({ message: 'Access denied: insufficient privileges.' });
+    }
+    req.user.role = dbUser.role;
+    next();
+  };
+};
 
 // Routes
 app.get('/', (req, res) => {
   res.send('🚀 Welcome to Green Line Trades Backend API');
 });
 
+// Registration Route
 app.post('/register', async (req, res) => {
   try {
-    const { firstName, lastName, email, workTel, mobileTel, business, password, type } = req.body;
+    const {
+      firstName, lastName, email, workTel,
+      mobileTel, business, password, role
+    } = req.body;
 
-    if (!firstName || !lastName || !email || !password || !workTel || !mobileTel) {
+    if (!firstName || !lastName || !email || !password || !mobileTel) {
       return res.status(400).json({ success: false, message: "Missing required fields." });
     }
 
@@ -82,16 +91,20 @@ app.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
+    // Use the provided role if valid, else default to consumer
+    const validRoles = ['consumer', 'merchant', 'admin'];
+    const assignedRole = validRoles.includes(role) ? role : 'consumer';
+
     const newUser = new User({
       firstName,
       lastName,
       username,
       email,
-      workTel,
+      workTel: workTel?.trim() || '',
       mobileTel,
       business,
       password: hashedPassword,
-      type
+      role: assignedRole
     });
 
     await newUser.save();
@@ -103,7 +116,7 @@ app.post('/register', async (req, res) => {
   }
 });
 
-// ✅ LOGIN ROUTE (outside of register handler!)
+// Login Route
 app.post('/login', async (req, res) => {
   try {
     const { identifier, password } = req.body;
@@ -123,7 +136,7 @@ app.post('/login', async (req, res) => {
 
     const token = jwt.sign(
       { userId: user._id, email: user.email },
-      "your_jwt_secret", // Replace with env variable in production
+      "your_jwt_secret",
       { expiresIn: "2h" }
     );
 
@@ -135,12 +148,81 @@ app.post('/login', async (req, res) => {
         lastName: user.lastName,
         email: user.email,
         username: user.username,
-        type: user.type
+        role: user.role
       }
     });
   } catch (error) {
     console.error("Login Error:", error);
     res.status(500).json({ success: false, error: "Server error" });
+  }
+});
+
+// Add Listing Route - Only merchants or admins
+app.post('/add-listing', authenticateToken, authorizeRoles('merchant', 'admin'), async (req, res) => {
+  try {
+    const { title, description, price, category } = req.body;
+
+    if (!title || !price) {
+      return res.status(400).json({ success: false, message: "Title and price are required." });
+    }
+
+    const newListing = new Listing({
+      title,
+      description,
+      price,
+      category,
+      owner: req.user.userId
+    });
+
+    await newListing.save();
+    res.status(201).json({ 
+      success: true, 
+      message: "Listing created successfully", 
+      listing: newListing 
+    });
+
+  } catch (error) {
+    console.error("Error saving listing:", error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+});
+
+// Message Submission Route (Optional Auth)
+app.post('/submit', (req, res) => {
+  const authHeader = req.headers['authorization'];
+  let user = null;
+
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    const token = authHeader.split(' ')[1];
+    try {
+      user = jwt.verify(token, "your_jwt_secret");
+      console.log("✅ Authenticated submission from:", user.email);
+    } catch (err) {
+      console.warn("⚠️ Invalid token provided:", err.message);
+    }
+  } else {
+    console.log("📩 Anonymous submission");
+  }
+
+  console.log("📩 Received submission:", req.body);
+  res.status(200).json({ success: true, message: "Message received" });
+});
+
+// GET Listings by Category
+app.get('/listings', async (req, res) => {
+  try {
+    const { category } = req.query;
+
+    const filter = category
+      ? { category: new RegExp('^' + category + '$', 'i') } // case-insensitive match
+      : {};
+
+    const listings = await Listing.find(filter).populate('owner', 'username email');
+
+    res.json({ success: true, listings });
+  } catch (error) {
+    console.error("Error fetching listings:", error);
+    res.status(500).json({ success: false, message: "Server error retrieving listings." });
   }
 });
 
