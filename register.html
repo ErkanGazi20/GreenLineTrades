@@ -49,8 +49,21 @@
 
       <input type="text" id="business" name="business" placeholder="Name of Business (Optional)" class="form-input" />
 
-      <input type="password" name="password" id="password" placeholder="Password" autocomplete="new-password" class="form-input" required />
+      <div class="password-field-container">
+        <input type="password" name="password" id="password" placeholder="Password" autocomplete="new-password" class="form-input" required />
+        <span id="passwordHelpIcon" title="Click to see password rules">❓</span>
+      </div>
+      <div id="passwordCriteria" class="password-criteria hidden">
+        <p>Password must be at least 10 characters long and include:</p>
+        <ul>
+          <li>✅ One uppercase letter</li>
+          <li>✅ One lowercase letter</li>
+          <li>✅ One number</li>
+          <li>✅ One special character</li>
+        </ul>
+      </div>
       <div id="passwordStrength" class="error-message"></div>
+      
 
       <input type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirm Password" class="form-input" required />
       <div id="passwordMatch" class="error-message"></div>
@@ -60,6 +73,11 @@
 
       <button type="submit" class="form-button">Register</button>
     </form>
+    
+    <div id="register-error-popup" class="popup hidden">
+      <span id="register-error-message"></span>
+    </div>
+
   </main>
 
   <!-- Footer Section -->

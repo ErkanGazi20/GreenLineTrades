@@ -104,91 +104,137 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // ✅ Register form logic
-  const registerForm = document.getElementById('registerForm');
+// ✅ Register form logic
+const registerForm = document.getElementById('registerForm');
 
-  if (registerForm) {
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const strengthDisplay = document.getElementById('passwordStrength');
-    const matchDisplay = document.getElementById('passwordMatch');
+// 🔔 Helper function to show error popup
+function showRegisterError(message) {
+  const popup = document.getElementById('register-error-popup');
+  const msgBox = document.getElementById('register-error-message');
+  if (popup && msgBox) {
+    msgBox.textContent = message;
+    popup.classList.remove('hidden');
+    setTimeout(() => popup.classList.add('hidden'), 4000);
+  } else {
+    alert(message); // fallback
+  }
+}
 
-    passwordInput.addEventListener('input', () => {
-      const value = passwordInput.value;
-      let strength = 'Weak';
-      let color = 'red';
+if (registerForm) {
+  const passwordInput = document.getElementById('password');
+  const confirmPasswordInput = document.getElementById('confirmPassword');
+  const strengthDisplay = document.getElementById('passwordStrength');
+  const matchDisplay = document.getElementById('passwordMatch');
 
-      if (value.length >= 8 && /[A-Z]/.test(value) && /[0-9]/.test(value) && /[^A-Za-z0-9]/.test(value)) {
-        strength = 'Strong';
-        color = 'green';
-      } else if (value.length >= 6) {
-        strength = 'Medium';
-        color = 'orange';
-      }
+  // Password strength indicator
+  passwordInput.addEventListener('input', () => {
+    const value = passwordInput.value;
+    const lengthValid = value.length >= 10;
+    const upperValid = /[A-Z]/.test(value);
+    const lowerValid = /[a-z]/.test(value);
+    const numberValid = /[0-9]/.test(value);
+    const specialValid = /[^A-Za-z0-9]/.test(value);
 
-      strengthDisplay.textContent = `Password strength: ${strength}`;
-      strengthDisplay.style.color = color;
-    });
+    let strength = 'Weak';
+    let color = 'red';
 
-    confirmPasswordInput.addEventListener('input', () => {
-      const match = passwordInput.value === confirmPasswordInput.value;
-      matchDisplay.textContent = match ? '✅ Passwords match' : '❌ Passwords do not match';
-      matchDisplay.style.color = match ? 'green' : 'red';
-    });
+    if (lengthValid && upperValid && lowerValid && numberValid && specialValid) {
+      strength = 'Strong';
+      color = 'green';
+    } else if (value.length >= 8) {
+      strength = 'Medium';
+      color = 'orange';
+    }
 
-    registerForm.addEventListener('submit', async function (e) {
-      e.preventDefault();
+    strengthDisplay.textContent = `Password strength: ${strength}`;
+    strengthDisplay.style.color = color;
+  });
 
-      const firstName = document.getElementById('firstName').value.trim();
-      const lastName = document.getElementById('lastName').value.trim();
-      const email = document.getElementById('email').value.trim();
-      const workTel = document.getElementById('workTel').value.trim();
-      const mobileTel = document.getElementById('mobileTel').value.trim();
-      const role = document.querySelector('input[name="role"]:checked').value;
-      const business = document.getElementById('business').value.trim();
-      const password = passwordInput.value.trim();
-      const confirmPassword = confirmPasswordInput.value.trim();
+  // Confirm password match check
+  confirmPasswordInput.addEventListener('input', () => {
+    const match = passwordInput.value === confirmPasswordInput.value;
+    matchDisplay.textContent = match ? '✅ Passwords match' : '❌ Passwords do not match';
+    matchDisplay.style.color = match ? 'green' : 'red';
+  });
 
-      if (!firstName || !lastName || !email || !password || !confirmPassword || !mobileTel) {
-        alert("Please fill in all required fields.");
-        return;
-      }
+  // Submit registration
+  registerForm.addEventListener('submit', async function (e) {
+    e.preventDefault();
 
-      if (password !== confirmPassword) {
-        matchDisplay.textContent = "Passwords do not match.";
-        matchDisplay.style.color = 'red';
-        return;
-      }
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const workTel = document.getElementById('workTel').value.trim();
+    const mobileTel = document.getElementById('mobileTel').value.trim();
+    const role = document.querySelector('input[name="role"]:checked')?.value;
+    const business = document.getElementById('business').value.trim();
+    const password = passwordInput.value.trim();
+    const confirmPassword = confirmPasswordInput.value.trim();
 
-      try {
-        const response = await fetch('http://localhost:5000/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            firstName, lastName, email, password,
-            workTel, mobileTel, role, business
-          })
-        });
+    if (!firstName || !lastName || !email || !password || !confirmPassword || !mobileTel || !role) {
+      showRegisterError("Please fill in all required fields.");
+      return;
+    }
 
-        const data = await response.json();
+    if (password !== confirmPassword) {
+      showRegisterError("Passwords do not match.");
+      return;
+    }
 
-        if (!response.ok) {
-          throw new Error(data.error || "Registration failed");
+    const lengthValid = password.length >= 10;
+    const upperValid = /[A-Z]/.test(password);
+    const lowerValid = /[a-z]/.test(password);
+    const numberValid = /[0-9]/.test(password);
+    const specialValid = /[^A-Za-z0-9]/.test(password);
+
+    if (!(lengthValid && upperValid && lowerValid && numberValid && specialValid)) {
+      showRegisterError("Password does not meet strength criteria.");
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName, lastName, email, password,
+          workTel, mobileTel, role, business
+        })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        const errorMsg = data.error || data.message || "Registration failed.";
+      
+        if (/already (registered|exists|in use)/i.test(errorMsg)) {
+          showRegisterError("An account with this email already exists.");
+        } else {
+          showRegisterError(errorMsg);
         }
+        return; 
+      }  
 
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-        console.log("✅ Registered and logged in:", data.user);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      console.log("✅ Registered and logged in:", data.user);
+      window.location.href = 'index.html';
+    } catch (err) {
+      console.error("❌ Registration error:", err);
+      showRegisterError(err.message || "Registration failed.");
+    }
+  });
 
-        window.location.href = 'index.html';
-      } catch (err) {
-        console.error("❌ Registration error:", err);
-        alert("Registration failed. See console for details.");
-      }
+  // Password criteria toggle
+  const passwordHelpIcon = document.getElementById('passwordHelpIcon');
+  const passwordCriteria = document.getElementById('passwordCriteria');
+
+  if (passwordHelpIcon && passwordCriteria) {
+    passwordHelpIcon.addEventListener('click', () => {
+      passwordCriteria.classList.toggle('hidden');
     });
   }
+}
 
   // Contact form logic
   const contactForm = document.querySelector('.contact-form');

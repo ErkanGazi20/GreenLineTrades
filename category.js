@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
     // Display the category name
-    title.textContent = `Category: ${decodeURIComponent(category).replace(/-/g, ' ')}`;
+    title.textContent = `${decodeURIComponent(category).replace(/-/g, ' ')}`;
   
     // Example: Fetch listings by category (you’ll replace this with actual backend request)
     fetch(`http://localhost:5000/listings?category=${encodeURIComponent(category)}`)
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
       })
       .catch(err => {
         console.error("Failed to load listings:", err);
-        listingsContainer.innerHTML = "<p>Error loading listings. Please try again later.</p>";
+        listingsContainer.innerHTML = "<p>There are currently no Listings for this category.</p>";
       });
   });
   
