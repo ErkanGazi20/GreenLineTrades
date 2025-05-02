@@ -3,12 +3,18 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const path = require('path'); // ✅ Required for serving static files
 const app = express();
 const Listing = require('./models/Listing');
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+// Serve index.html and other root-level static files
+app.use(express.static(__dirname));
+
+// Optionally still serve js folder explicitly if needed (can also be served via above)
+app.use('/js', express.static(path.join(__dirname, 'js')));
 
 // MongoDB Connection
 mongoose.connect('mongodb://127.0.0.1:27017/greenlinetrades')
@@ -91,7 +97,6 @@ app.post('/register', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Use the provided role if valid, else default to consumer
     const validRoles = ['consumer', 'merchant', 'admin'];
     const assignedRole = validRoles.includes(role) ? role : 'consumer';
 
@@ -108,7 +113,26 @@ app.post('/register', async (req, res) => {
     });
 
     await newUser.save();
-    res.status(201).json({ success: true, message: "User registered successfully!" });
+
+    // ✅ Create token
+    const token = jwt.sign(
+      { userId: newUser._id, email: newUser.email },
+      "your_jwt_secret",
+      { expiresIn: "2h" }
+    );
+
+    // ✅ Send token and user (omit password)
+    res.status(201).json({
+      success: true,
+      token,
+      user: {
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        email: newUser.email,
+        username: newUser.username,
+        role: newUser.role
+      }
+    });
 
   } catch (error) {
     console.error("Registration Error:", error);
@@ -206,24 +230,6 @@ app.post('/submit', (req, res) => {
 
   console.log("📩 Received submission:", req.body);
   res.status(200).json({ success: true, message: "Message received" });
-});
-
-// GET Listings by Category
-app.get('/listings', async (req, res) => {
-  try {
-    const { category } = req.query;
-
-    const filter = category
-      ? { category: new RegExp('^' + category + '$', 'i') } // case-insensitive match
-      : {};
-
-    const listings = await Listing.find(filter).populate('owner', 'username email');
-
-    res.json({ success: true, listings });
-  } catch (error) {
-    console.error("Error fetching listings:", error);
-    res.status(500).json({ success: false, message: "Server error retrieving listings." });
-  }
 });
 
 const PORT = 5000;

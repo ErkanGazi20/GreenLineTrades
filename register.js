@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const passwordMatchDiv = document.querySelector('#passwordMatch');
   const submitBtn = form.querySelector('button[type="submit"]');
 
+
   const getPasswordStrength = (password) => {
     const regexPatterns = [/[A-Z]/, /[a-z]/, /\d/, /[!@#$%^&*(),.?":{}|<>]/];
     const matches = regexPatterns.filter(pattern => pattern.test(password)).length;
@@ -59,9 +60,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const business = form.business.value.trim();
     const password = passwordInput.value.trim();
     const confirmPassword = confirmPasswordInput.value.trim();
+    const role = form.querySelector('input[name="role"]:checked').value;
     const type = form.type.value;
 
-    if (!firstName || !lastName || !email || !password || !confirmPassword || !workTel || !mobileTel) {
+    if (!firstName || !lastName || !email || !password || !confirmPassword || !mobileTel) {
       alert("Please fill in all required fields.");
       return;
     }
@@ -80,8 +82,8 @@ document.addEventListener('DOMContentLoaded', function () {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          firstName, lastName, email, workTel, mobileTel, business, password, type
-        })
+          firstName, lastName, email, workTel, mobileTel, business, password, role
+        })               
       });
 
       const data = await response.json();

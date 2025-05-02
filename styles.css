@@ -255,6 +255,21 @@ form.contact-form {
   display: inline-block;
 }
 
+.radio-group {
+  display: flex;
+  gap: 2rem;
+  margin: 1rem 0;
+  align-items: center;
+  flex-wrap: wrap; /* allows it to stack on smaller screens */
+}
+
+.radio-option {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+}
+
   /* Animation keyframes */
 @keyframes slideDown {
     0% {

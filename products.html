@@ -1,14 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
-    <link rel="stylesheet" href="styles.css" />
-    <script src="app.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Products</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="js/app.js" defer></script>
+  <script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+      const boxes = document.querySelectorAll('.category-box');
+      boxes.forEach(box => {
+        box.addEventListener('click', () => {
+          const category = box.getAttribute('data-category');
+          window.location.href = `category.html?name=${encodeURIComponent(category)}`;
+        });
+      });
+    });
+  </script>
 </head>
 <body>
-         <!-- Header Section -->
+  <!-- Header Section -->
   <header>
     <nav class="nav-container">
       <div class="logo">
@@ -24,28 +35,28 @@
         <li id="welcome-message" style="display:none; font-weight: bold;"></li>
         <li id="logout-link" style="display:none;"><a href="#">Logout</a></li>
       </ul>
-      
     </nav>
   </header>
 
   <!-- Main Section -->
   <main class="products-page">
     <section class="products-grid">
-      <div class="category-box">Dairy</div>
-      <div class="category-box">Produce</div>
-      <div class="category-box">Spices & Herbs</div>
-      <div class="category-box">Beverages</div>
-      <div class="category-box">Bakery</div>
-      <div class="category-box">Paint</div>
-      <div class="category-box">Aliminum</div>
-      <div class="category-box">Other</div>
+      <div class="category-box" data-category="dairy">Dairy</div>
+      <div class="category-box" data-category="produce">Produce</div>
+      <div class="category-box" data-category="spices-herbs">Spices & Herbs</div>
+      <div class="category-box" data-category="beverages">Beverages</div>
+      <div class="category-box" data-category="bakery">Bakery</div>
+      <div class="category-box" data-category="paint">Paint</div>
+      <div class="category-box" data-category="aluminum">Aluminum</div>
+      <div class="category-box" data-category="other">Other</div>
     </section>
   </main>
 
-      <!-- Footer Section -->
-      <footer>
-        <p>&copy; 2025 Green Line Trades. All rights reserved.</p>
-      </footer>
-    
+  <script src="/js/auth.js"></script>
+
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2025 Green Line Trades. All rights reserved.</p>
+  </footer>
 </body>
 </html>

@@ -1,16 +1,18 @@
-<!-- login.html -->
+<!-- public/login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login | Green Line Trades</title>
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="login.js"></script>
+
+  <!-- ✅ FIXED paths: no need for 'public/' prefix -->
+  <link rel="stylesheet" href="styles.css" />
+  <script src="js/app.js" defer></script>
 </head>
 <body>
 
-          <!-- Header Section -->
+  <!-- Header Section -->
   <header>
     <nav class="nav-container">
       <div class="logo">
@@ -24,7 +26,6 @@
         <li><a href="login.html">Login</a></li>
         <li><a href="register.html">Register</a></li>
       </ul>
-      
     </nav>
   </header>
 
@@ -55,14 +56,11 @@
       <button type="submit" class="form-button">Login</button>
     </form>
   </main>
-  
-  
-  
 
-      <!-- Footer Section -->
-      <footer>
-        <p>&copy; 2025 Green Line Trades. All rights reserved.</p>
-      </footer>
+  <!-- Footer Section -->
+  <footer>
+    <p>&copy; 2025 Green Line Trades. All rights reserved.</p>
+  </footer>
 
 </body>
 </html>
